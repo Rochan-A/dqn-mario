@@ -154,7 +154,8 @@ def wrap_dqn(env):
 
 # 針對mario去修改size
 def _process_frame_mario(frame):
-	img = np.reshape(frame, [224, 256, 3]).astype(np.float32)
+	#img = np.reshape(frame, [224, 256, 3]).astype(np.float32)
+	img = np.reshape(frame, [240, 256, 3]).astype(np.float32)
 	# RGB轉灰階
 	# https://en.wikipedia.org/wiki/Grayscale#Converting_color_to_grayscale
 	img = img[:, :, 0] * 0.299 + img[:, :, 1] * 0.587 + img[:, :, 2] * 0.114

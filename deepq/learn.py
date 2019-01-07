@@ -20,7 +20,6 @@ from gym_super_mario_bros.actions import COMPLEX_MOVEMENT
 USE_CUDA = torch.cuda.is_available()
 dtype = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
 
-
 class Variable(autograd.Variable):
 	def __init__(self, data, *args, **kwargs):
 		if USE_CUDA:
@@ -206,7 +205,6 @@ def mario_learning(
 	#assert type(env.observation_space) == gym.spaces.Box
 	#assert type(env.action_space)      == gym.spaces.MultiDiscrete
 
-
 	# 檢查是否是low-dimensional observations (e.g. RAM)
 	if len(env.observation_space.shape) == 1:
 		input_arg = env.observation_space.shape[0]
@@ -214,10 +212,8 @@ def mario_learning(
 		img_h, img_w, img_c = env.observation_space.shape
 		input_arg = frame_history_len * img_c  # 實作論文中的每4 frame擷取一次
 
-
 	num_actions = len(COMPLEX_MOVEMENT)
 	#num_actions = env.action_space.shape
-
 
 	# Construct an epilson greedy policy with given exploration schedule
 	def select_epilson_greedy_action(model, obs, t):
@@ -234,7 +230,7 @@ def mario_learning(
 		action = action % num_actions
 		if action == 0:
 			# Move right while jumping
-			action_onehot = np.array([0, 0, 0, 1, 1, 0])
+			action_onehot = np.array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0])
 		else:
 			action_onehot = np.zeros(num_actions, dtype=int)
 			action_onehot[action] = 1
@@ -284,9 +280,15 @@ def mario_learning(
 			action = random.randrange(num_actions)
 
 		# one hot encoding
+		print(action)
 		act_onehot = to_onehot(action, num_actions)
 
-		obs, reward, done, _ = env.step(act_onehot)
+		k = 0
+		for i in range(11):
+			if act_onehot[i] == 1:
+				k = i
+
+		obs, reward, done, _ = env.step(k)
 		#reward = max(-1.0, min(reward, 1.0))
 		replay_buffer.store_effect(last_idx, action, reward, done) # 將新的資訊存入buffer中
 

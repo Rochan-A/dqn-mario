@@ -16,7 +16,6 @@ from deepq.model import DQN
 from common.atari_wrapper import wrap_mario
 from common.schedule import LinearSchedule
 
-
 SEED = 0
 BATCH_SIZE = 32
 GAMMA = 0.99
@@ -28,8 +27,6 @@ TARGET_UPDATE_FREQ = 3000
 LEARNING_RATE = 0.00025
 ALPHA = 0.95
 EPS = 0.01
-
-
 
 def main(env):
 	### 首先要為隨時間改變的參數設定schedule
