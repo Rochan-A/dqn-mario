@@ -4,7 +4,6 @@ import numpy as np
 from collections import namedtuple
 
 import gym
-import gym_super_mario_bros
 from gym import wrappers
 
 import torch
@@ -15,6 +14,10 @@ from deepq.model import DQN
 
 from common.atari_wrapper import wrap_mario
 from common.schedule import LinearSchedule
+
+import gym_super_mario_bros
+from nes_py.wrappers import BinarySpaceToDiscreteSpaceEnv
+from gym_super_mario_bros.actions import COMPLEX_MOVEMENT
 
 SEED = 0
 BATCH_SIZE = 32
@@ -44,6 +47,7 @@ def main(env):
 		kwargs=dict(lr=LEARNING_RATE, alpha=ALPHA, eps=EPS),
 	)
 
+	# Main Mario training function
 	mario_learning(
 		env=env,
 		q_func=DQN,
@@ -60,8 +64,9 @@ def main(env):
 
 if __name__ == '__main__':
 
-	#env = gym.make("ppaquette/SuperMarioBros-1-1-v0")
+	# Initialize the environment using gym_super_mario_bros
 	env = gym_super_mario_bros.make('SuperMarioBros-1-1-v0')
+	env = BinarySpaceToDiscreteSpaceEnv(env, COMPLEX_MOVEMENT)
 
 	# set global seeds
 	env.seed(SEED)
