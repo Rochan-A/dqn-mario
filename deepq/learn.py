@@ -213,7 +213,7 @@ def mario_learning(
 		input_arg = frame_history_len * img_c  # 實作論文中的每4 frame擷取一次
 
 	num_actions = len(COMPLEX_MOVEMENT)
-	#num_actions = env.action_space.shape
+	# num_actions = env.action_space.shape
 
 	# Construct an epilson greedy policy with given exploration schedule
 	def select_epilson_greedy_action(model, obs, t):
@@ -280,15 +280,17 @@ def mario_learning(
 			action = random.randrange(num_actions)
 
 		# one hot encoding
-		print(action)
-		act_onehot = to_onehot(action, num_actions)
+		# act_onehot = to_onehot(action, num_actions)
 
-		k = 0
-		for i in range(11):
-			if act_onehot[i] == 1:
-				k = i
+		# k = 0
+		# for i in range(11):
+		#	if act_onehot[i] == 1:
+		#		k = i
 
-		obs, reward, done, _ = env.step(k)
+		# print(action, k)
+
+		obs, reward, done, _ = env.step(action)
+		env.render()
 		#reward = max(-1.0, min(reward, 1.0))
 		replay_buffer.store_effect(last_idx, action, reward, done) # 將新的資訊存入buffer中
 
