@@ -10,7 +10,6 @@ def sample_n_unique(sampling_f, n):
 			res.append(candidate)
 	return res
 
-
 class ReplayBuffer(object):
 	def __init__(self, size, frame_history_len):  # size 代表 replay buffer size
 		self.size = size
