@@ -2,7 +2,6 @@
 def linear_interpolation(l, r, alpha):
 	return l + alpha * (r - l)
 
-
 class PiecewiseSchedule(object):
 	def __init__(self, endpoints, interpolation=linear_interpolation, outside_value=None):
 		"""PiecewiseSchedule
@@ -28,8 +27,6 @@ class PiecewiseSchedule(object):
 		# 如果t不屬於任何pieces，返回outside value
 		assert self._outside_value is not None
 		return self._outside_value
-
-
 
 class LinearSchedule(object):
 	def __init__(self, schedule_timesteps, final_p, initial_p=1.0):

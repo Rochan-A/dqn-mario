@@ -5,7 +5,6 @@ import gym
 from gym import spaces
 from PIL import Image
 
-
 # 重新實作step與reset，主要是reset，以當lives當指標來當作episode真正的結束
 class EpisodicLifeEnv(gym.Wrapper):
 	def __init__(self, env=None):
@@ -34,8 +33,6 @@ class EpisodicLifeEnv(gym.Wrapper):
 		self.lives = self.env.unwrapped.ale.lives()
 		return obs
 
-
-
 # 先隨機進行N次noop(no opearation)當作初始obs，但不知道這樣的好處為何?
 class NoopResetEnv(gym.Wrapper):
 	def __init__(self, env=None, noop_max=30):
@@ -49,8 +46,6 @@ class NoopResetEnv(gym.Wrapper):
 		for _ in range(noops):
 			obs, _, _, _ = self.env.step(0)
 		return obs
-
-
 
 # 實作每4個frames當作一次sample
 class MaxAndSkipEnv(gym.Wrapper):
@@ -82,8 +77,6 @@ class MaxAndSkipEnv(gym.Wrapper):
 		self._obs_buffer.append(obs)
 		return obs
 
-
-
 # 先Fire一發，再走一步action來當作初始obs，一樣還是不知道為何要這樣做
 class FireResetEnv(gym.Wrapper):
 	def __init__(self, env=None):
@@ -97,11 +90,10 @@ class FireResetEnv(gym.Wrapper):
 		obs, _, _, _ = self.env.step(2)
 		return obs
 
-
-
 # 遊戲畫面前處理
 def _process_frame84(frame):
-	img = np.reshape(frame, [210, 160, 3]).astype(np.float32)
+	#img = np.reshape(frame, [210, 160, 3]).astype(np.float32)
+	img = np.reshape(frame, [240, 256, 3]).astype(np.float32)
 	# RGB轉灰階
 	# https://en.wikipedia.org/wiki/Grayscale#Converting_color_to_grayscale
 	img = img[:, :, 0] * 0.299 + img[:, :, 1] * 0.587 + img[:, :, 2] * 0.114
@@ -112,8 +104,6 @@ def _process_frame84(frame):
 	x_t = resized_screen[18:102, :]
 	x_t = np.reshape(x_t, [84, 84, 1])
 	return x_t.astype(np.uint8)
-
-
 
 # 重新實作經過前處理的step與reset
 class ProcessFrame84(gym.Wrapper):
@@ -128,15 +118,11 @@ class ProcessFrame84(gym.Wrapper):
 	def _reset(self):
 		return _process_frame84(self.env.reset())
 
-
-
 # 假如reward大於0 -> 1，等於0 -> 0，小於0 -> -1
 class ClippedRewardsWrapper(gym.Wrapper):
 	def _step(self, action):
 		obs, reward, done, info = self.env.step(action)
 		return obs, np.sign(reward), done, info
-
-
 
 def wrap_dqn(env):
 	assert 'NoFrameskip' in env.spec.id
@@ -148,9 +134,6 @@ def wrap_dqn(env):
 	env = ProcessFrame84(env)
 	env = ClippedRewardsWrapper(env)
 	return env
-
-
-
 
 # 針對mario去修改size
 def _process_frame_mario(frame):
@@ -167,8 +150,6 @@ def _process_frame_mario(frame):
 	x_t = np.reshape(x_t, [84, 84, 1])
 	return x_t.astype(np.uint8)
 
-
-
 # 重新實作經過前處理的step與reset
 class ProcessFrameMario(gym.Wrapper):
 	def __init__(self, env=None):
@@ -181,8 +162,6 @@ class ProcessFrameMario(gym.Wrapper):
 
 	def _reset(self):
 		return _process_frame_mario(self.env.reset())
-
-
 
 def wrap_mario(env):
 	#assert 'SuperMarioBros' in env.spec.id
