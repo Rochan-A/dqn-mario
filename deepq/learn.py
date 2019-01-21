@@ -217,7 +217,8 @@ def mario_learning(
 		eps_threshold = exploration.value(t)
 		if sample > eps_threshold:
 			obs = torch.from_numpy(obs).type(dtype).unsqueeze(0) / 255.0
-			return model(Variable(obs, volatile=True)).data.max(1)[1].cpu()
+			with torch.no_grad():
+				return model(Variable(obs)).data.max(1)[1].cpu()
 		else:
 			return torch.IntTensor([[random.randrange(num_actions)]])
 
@@ -272,7 +273,7 @@ def mario_learning(
 
 		# buffer 收集到一定的量才開始學習
 		if t > learning_starts:
-			action = select_epilson_greedy_action(Q, recent_observations, t)[0, 0]
+			action = select_epilson_greedy_action(Q, recent_observations, t)[0]
 			int_action = int(action.data.numpy())
 		else:
 			action = random.randrange(num_actions)
