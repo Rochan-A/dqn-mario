@@ -273,8 +273,10 @@ def mario_learning(
 		# buffer 收集到一定的量才開始學習
 		if t > learning_starts:
 			action = select_epilson_greedy_action(Q, recent_observations, t)[0, 0]
+			int_action = int(action.data.numpy())
 		else:
 			action = random.randrange(num_actions)
+			int_action = action
 
 		# one hot encoding		NOTE: NOT USED
 		# act_onehot = to_onehot(action, num_actions)
@@ -285,7 +287,7 @@ def mario_learning(
 		#	if act_onehot[i] == 1:
 		#		k = i
 
-		obs, reward, done, _ = env.step(action)
+		obs, reward, done, _ = env.step(int_action)
 		env.render()
 		#reward = max(-1.0, min(reward, 1.0))
 		replay_buffer.store_effect(last_idx, action, reward, done) # 將新的資訊存入buffer中
