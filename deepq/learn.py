@@ -45,7 +45,7 @@ def mario_learning(
 	):
 
 	# Observation Space Size = (84, 84, 1)
-	input_arg = env.observation_space.shape[0] * env.observation_space.shape[1] * env.observation_space.shape[2] * frame_history_len
+	input_arg = frame_history_len
 
 	# Action Space Size
 	num_actions = len(COMPLEX_MOVEMENT)
