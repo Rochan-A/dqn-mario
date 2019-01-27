@@ -65,7 +65,7 @@ def main(env):
 if __name__ == '__main__':
 
 	# Initialize the environment using gym_super_mario_bros
-	env = gym_super_mario_bros.make('SuperMarioBros-1-1-v0')
+	env = gym_super_mario_bros.make('SuperMarioBros-1-1-v3')
 	env = BinarySpaceToDiscreteSpaceEnv(env, COMPLEX_MOVEMENT)
 
 	# set global seeds
