@@ -103,7 +103,7 @@ def mario_learning(
 			int_action = action
 
 		obs, reward, done, _ = env.step(int_action)
-		env.render()
+		# env.render()
 		#reward = max(-1.0, min(reward, 1.0))
 		replay_buffer.store_effect(last_idx, action, reward, done) # 將新的資訊存入buffer中
 
