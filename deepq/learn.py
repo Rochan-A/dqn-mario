@@ -126,7 +126,7 @@ def mario_learning(
 				rew_batch = rew_batch.cuda()
 
 			# 從抽出的batch observation中得出現在的Q值
-			current_Q_values = Q(obs_batch).gather(1, act_batch.unsqueeze(1))
+			current_Q_values = Q(obs_batch).gather(1, act_batch.unsqueeze(1)).squeeze()
 			# 用next_obs_batch計算下一個Q值，detach代表將target network從graph中分離，不去計算它的gradient
 			next_max_q = target_Q(next_obs_batch).detach().max(1)[0]
 			next_Q_values = not_done_mask * next_max_q
